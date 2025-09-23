@@ -4,14 +4,16 @@ services:
       context: ./backend
     volumes:
       - ./backend:/app
-      - ./backend/wait-for-it.sh:/wait-for-it.sh  # monte o script no container
+      - ./backend/wait-for-it.sh:/wait-for-it.sh
+      - ./backend/entrypoint.sh:/entrypoint.sh
     env_file:
       - .env
     ports:
       - "8000:8000"
     depends_on:
       - db
-    command: ["bash", "/wait-for-it.sh", "db:5432", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+    command: ["bash", "/entrypoint.sh", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+
 
   db:
     image: postgres:15
