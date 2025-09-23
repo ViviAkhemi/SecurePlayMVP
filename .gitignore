@@ -15,7 +15,10 @@ dist-ssr/
 
 # Local environment files
 *.local
-.env  # Evitar subir variáveis sensíveis
+# Ignorar todos os arquivos .env, em qualquer lugar do projeto
+**/.env
+# Evitar subir variáveis sensíveis
+
 
 # Editor directories and files
 .vscode/
