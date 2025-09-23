@@ -11,7 +11,7 @@
 
     <!-- TELA MENU -->
     <div v-else-if="screen === 'menu'">
-      <h2>Bem-vindo, {{ username }}!</h2>
+      <h2>Bem-vindo, {{ username || 'Usuário'  }}!</h2>
       <p>Escolha seu nível:</p>
       <button @click="startLevel(0)">🥉 Iniciante</button>
       <button @click="startLevel(1)">🥈 Intermediário</button>
@@ -143,11 +143,33 @@ const currentQuestion = computed(() => {
   return levels[currentLevel.value][currentIndex.value]
 })
 
-function login() {
-  if (username.value === 'admin' && password.value === '1234') {
+async function login() {
+  loginError.value = false
+  try {
+    const response = await fetch('http://localhost:8000/api/token/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: username.value,
+        password: password.value
+      })
+    })
+
+    if (!response.ok) {
+      loginError.value = true
+      return
+    }
+
+    const data = await response.json()
+
+    // Salva os tokens no localStorage
+    localStorage.setItem('access_token', data.access)
+    localStorage.setItem('refresh_token', data.refresh)
+
     screen.value = 'menu'
     loginError.value = false
-  } else {
+  } catch (error) {
+    console.error('Erro no login:', error)
     loginError.value = true
   }
 }
@@ -218,6 +240,7 @@ function restart() {
   correctStreak.value = 0
 }
 </script>
+
 
 <style scoped>
 .quiz-container {
