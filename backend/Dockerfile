@@ -1,32 +1,16 @@
-# backend/Dockerfile
+FROM python:3.10-slim
 
-FROM python:3.11-slim
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Evita prompts interativos
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Atualiza o sistema e instala dependências nativas (se precisar)
-# (Use apenas se seus pacotes do requirements precisarem de bibliotecas nativas)
-# RUN apt-get update && apt-get install -y \
-#     build-essential \
-#     libpq-dev \
-#     && rm -rf /var/lib/apt/lists/*
-
-# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia apenas os requirements primeiro (melhora o cache do Docker)
+# Copia só o arquivo requirements para usar cache do Docker quando não mudar
 COPY requirements.pip.txt .
 
-# Instala as dependências Python
 RUN pip install --no-cache-dir -r requirements.pip.txt
 
-# Copia todo o restante do projeto
+# Copia o restante do código só depois das dependências instaladas
 COPY . .
 
-# Expõe a porta padrão usada pelo Django
-EXPOSE 8000
-
-# Comando padrão para rodar o servidor Django
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
