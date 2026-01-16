@@ -1,63 +1,73 @@
-##### ⚠️ Nota importante
-
-Este repositório tem como objetivo fornecer recursos educacionais.  
-Por favor, utilize-o de forma responsável e respeitando as limitações de uso para fins não comerciais.
-
-
 # 🔐 MVP_SecurePlay
 
-Plataforma gamificada para treinamento em **segurança da informação** voltada a colaboradores corporativos, com foco em níveis **Iniciante**, **Intermediário** e  **Especialista**. Criado com Django (backend) e Vue.js (frontend), usando Docker e PostgreSQL.
+Plataforma gamificada para **treinamento em segurança da informação**, voltada a colaboradores corporativos.  
+Os usuários avançam através de **níveis Iniciante, Intermediário e Especialista**, respondendo quizzes para ganhar **pontos e badges**.  
+
+O projeto também inclui **análises de segurança automatizadas**, usando OWASP Dependency-Check e Semgrep, para ensinar boas práticas de desenvolvimento seguro.
 
 ---
 
 ## 🚀 Funcionalidades (MVP)
 
-- ✅ Login com usuário e senha
-- ✅ Desafios para usuários iniciantes, intermediários, especialistas
-- ✅ Sistema de pontuação e badges
-- ✅ Interface web com Vue.js
-- ✅ Backend com API REST em Django
-- ✅ Banco de dados PostgreSQL (em container)
-- ✅ Docker Compose para fácil execução local
-
-
-## 🚀 Rodando localmente com Docker
-
-```bash
-docker compose up --build -d
-
-Acesse em: http://localhost:5173
-
-
-## 🛠 Tecnologias Usadas
-
-- **Backend:** Python 3.11, Django, Django REST Framework, Djoser (auth)
-- **Frontend:** Vue.js 3, Vite
-- **Banco de Dados:** PostgreSQL
-- **DevOps:** Docker, Docker Compose
-- **Docker
+- **Autenticação de usuários** com JWT via Djoser  
+- **Quizzes gamificados** para 3 níveis de dificuldade  
+- **Sistema de pontuação e badges**  
+- **Interface web responsiva** com Vue.js e Vite  
+- **API RESTful** para frontend consumir dados de quizzes e progresso  
+- **Banco de dados PostgreSQL** containerizado  
+- **Execução simplificada com Docker Compose**  
 
 ---
 
-### 1. Clone este repositório
+## 🛠 Tecnologias e Ferramentas
+
+| Camada         | Tecnologias/Versões                     |
+|----------------|----------------------------------------|
+| Backend        | Python 3.11, Django, Django REST, Djoser |
+| Frontend       | Vue.js 3, Vite                          |
+| Banco de Dados | PostgreSQL                               |
+| DevOps         | Docker, Docker Compose                   |
+| Segurança      | OWASP Dependency-Check, Semgrep         |
+
+---
+
+## 📂 Estrutura do Projeto
+
+
+---
+
+## 🐳 Rodando Localmente
+
+### Com Docker
 
 ```bash
-git clone https://github.com/ViviAkhemi/SecurePlayMVP,git
+git clone https://github.com/ViviAkhemi/SecurePlayMVP.git
 cd SecurePlayMVP
+docker compose up --build -d
 
-docker-compose up --build
+Backend: http://localhost:8000
+Frontend: http://localhost:5173
 
-Backend rodando em: http://localhost:8000
+Sem Docker (manual)
+# Backend
+cd backend
+python -m venv venv
+source venv/bin/activate   # Linux/macOS
+venv\Scripts\activate      # Windows
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
 
-Frontend rodando em: http://localhost:5173
+# Frontend
+cd frontend
+npm install
+npm run dev
 
-SecurePlayMVP/
-├── backend/
-│   ├── core/           # Projeto Django
-│   ├── users/          # Autenticação e perfis
-│   ├── lessons/        # Conteúdos gamificados
-│   ├── progress/       # Progresso e badges
-├── frontend/
-│   └── App.vue/   # Projeto Vue.js
-├── docker-compose.yml
-├── README.md
+⚙️ API Endpoints (Resumo Educativo)
+
+| Endpoint         | Método | Descrição                           | Exemplo de Requisição                       |
+| ---------------- | ------ | ----------------------------------- | ------------------------------------------- |
+| `/api/token/`    | POST   | Login com username e senha          | `{ "username": "user", "password": "123" }` |
+| `/api/lessons/`  | GET    | Lista quizzes disponíveis por nível | `{ "level": 0 }`                            |
+| `/api/progress/` | GET    | Consulta progresso do usuário       | —                                           |
+| `/api/progress/` | POST   | Atualiza pontos e badges            | `{ "points": 10, "badge": "🥉 Iniciante" }` |
